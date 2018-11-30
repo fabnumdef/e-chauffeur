@@ -1,0 +1,46 @@
+version: "3"
+
+services:
+  dashboard:
+    build: ./dashboard
+    restart: always
+    ports:
+      - "3001:3000"
+    command:
+      "npm run start"
+
+  driver:
+    build: ./driver
+    restart: always
+    ports:
+      - "3002:3000"
+    command:
+      "npm run start"
+
+  user:
+    build: ./user
+    restart: always
+    ports:
+      - "3003:3000"
+    command:
+      "npm run start"
+
+  api:
+    build: ./api
+    restart: always
+    command:
+      "npm run serve"
+    environment:
+      MONGODB: "mongodb://mongo/e-chauffeur"
+    ports:
+      - "1337:1337"
+    depends_on:
+      - mongo
+
+  mongo:
+    container_name: mongo
+    image: mongo
+    volumes:
+      - ./.mongo_database:/data/db
+    ports:
+      - "27017:27017"

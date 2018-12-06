@@ -1,4 +1,6 @@
 .mongo_database
+inventory.ini
+deploy_key*
 
 # Created by .ignore support plugin (hsz.mobi)
 ### JetBrains template

@@ -1,0 +1,52 @@
+---
+- hosts: all
+  remote_user: root
+
+  vars:
+    pip_install_packages:
+      - name: docker
+      - name: docker-compose
+    git_path: /opt/e-chauffeur
+    home_path: /root
+
+  roles:
+    - { role: "geerlingguy.pip" }
+    - { role: "geerlingguy.docker" }
+
+  pre_tasks:
+    - name: "Update packages list"
+      apt: update_cache=yes
+
+    - name: "Upgrade packages"
+      apt: upgrade=safe
+
+    - name: "Ensure that apt-transport-https is available"
+      apt: name=apt-transport-https state=latest
+
+  tasks:
+    - name: "Ensure .ssh directory exists."
+      file:
+        path: "{{ home_path }}/.ssh"
+        state: directory
+        mode: 0700
+
+    - name: "Ensure GitHub deploy key is present on the server."
+      copy:
+        src: "./deploy_key" # Please generate this file first.
+        dest: "{{ home_path }}/.ssh/id_rsa"
+        mode: 0600
+
+    - name: "Clone repository into {{git_path}}."
+      git:
+        repo: git@github.com:fabnumdef/e-chauffeur.git
+        version: master
+        accept_hostkey: yes
+        update: yes
+        dest: "{{ git_path }}"
+
+    - name: "Run service in {{git_path}}"
+      docker_service:
+        project_src: "{{ git_path }}"
+        state: present
+        restarted: yes
+        build: yes

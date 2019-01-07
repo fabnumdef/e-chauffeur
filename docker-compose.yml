@@ -4,26 +4,36 @@ services:
   dashboard:
     build: ./dashboard
     restart: always
-    ports:
-      - "3001:3000"
     command:
       "npm run start"
+    environment:
+      API_URL: "${API_URL}"
+    labels:
+      - "traefik.frontend.rule=Host:${DASHBOARD_HOST}"
+      - "traefik.port=3000"
 
   driver:
     build: ./driver
     restart: always
-    ports:
-      - "3002:3000"
     command:
       "npm run start"
+    environment:
+      API_URL: "${API_URL}"
+    labels:
+      - "traefik.frontend.rule=Host:${DRIVER_HOST}"
+      - "traefik.port=3000"
 
   user:
     build: ./user
     restart: always
-    ports:
-      - "3003:3000"
     command:
       "npm run start"
+    environment:
+      API_URL: "${API_URL}"
+    labels:
+      - "traefik.frontend.rule=Host:${USER_HOST}"
+      - "traefik.port=3000"
+
 
   api:
     build: ./api
@@ -32,8 +42,9 @@ services:
       "npm run serve"
     environment:
       MONGODB: "mongodb://mongo/e-chauffeur"
-    ports:
-      - "1337:1337"
+    labels:
+      - "traefik.frontend.rule=Host:${API_HOST}"
+      - "traefik.port=1337"
     depends_on:
       - mongo
 
@@ -42,3 +53,11 @@ services:
     image: mongo
     volumes:
       - ./.mongo_database:/data/db
+
+  reverse-proxy:
+    image: traefik
+    command: --docker
+    ports:
+      - "80:80"
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock

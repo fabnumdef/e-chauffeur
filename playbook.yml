@@ -8,6 +8,20 @@
       - name: docker-compose
     git_path: /opt/e-chauffeur
     home_path: /root
+    nginx_revproxy_sites:
+      default:
+        ssl: false
+        letsencrypt: false
+
+      example.com:
+        domains:
+          - example.com
+          - www.example.com
+        upstreams:
+          - { backend_address: 192.168.0.100, backend_port: 80 }
+          - { backend_address: 192.168.0.101, backend_port: 80 }
+        ssl: true
+        letsencrypt: false
 
   roles:
     - { role: "geerlingguy.pip" }
@@ -50,3 +64,9 @@
         state: present
         restarted: yes
         build: yes
+      environment:
+        API_URL: "://{{ api_url }}"
+        API_HOST: "{{ api_url }}"
+        DASHBOARD_HOST: "{{ dashboard_url }}"
+        DRIVER_HOST: "{{ driver_url }}"
+        USER_HOST: "{{ user_url }}"

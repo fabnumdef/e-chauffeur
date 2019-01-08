@@ -64,6 +64,7 @@
         state: present
         restarted: yes
         build: yes
+        nocache: yes
       environment:
         API_URL: "://{{ api_url }}"
         API_HOST: "{{ api_url }}"

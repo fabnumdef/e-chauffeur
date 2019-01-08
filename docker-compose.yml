@@ -5,7 +5,7 @@ services:
     build: ./dashboard
     restart: always
     command:
-      "npm run start"
+      "npm run build && npm run start"
     environment:
       API_URL: "${API_URL}"
     labels:
@@ -16,7 +16,7 @@ services:
     build: ./driver
     restart: always
     command:
-      "npm run start"
+      "npm run build && npm run start"
     environment:
       API_URL: "${API_URL}"
     labels:
@@ -27,7 +27,7 @@ services:
     build: ./user
     restart: always
     command:
-      "npm run start"
+      "npm run build && npm run start"
     environment:
       API_URL: "${API_URL}"
     labels:

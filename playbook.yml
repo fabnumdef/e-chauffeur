@@ -58,6 +58,11 @@
         update: yes
         dest: "{{ git_path }}"
 
+    - name: "Generate env file"
+      template:
+        src: "./environment.env.j2"
+        dest: "{{ git_path }}/environment.env"
+
     - name: "Run service in {{git_path}}"
       docker_service:
         project_src: "{{ git_path }}"
@@ -66,7 +71,6 @@
         build: yes
         nocache: yes
       environment:
-        API_URL: "://{{ api_url }}"
         API_HOST: "{{ api_url }}"
         DASHBOARD_HOST: "{{ dashboard_url }}"
         DRIVER_HOST: "{{ driver_url }}"

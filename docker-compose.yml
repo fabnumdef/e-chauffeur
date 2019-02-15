@@ -6,8 +6,8 @@ services:
     restart: always
     command:
       "npm run build && npm run start"
-    environment:
-      API_URL: "${API_URL}"
+    env_file:
+      - "environment.env"
     labels:
       - "traefik.frontend.rule=Host:${DASHBOARD_HOST}"
       - "traefik.port=3000"
@@ -17,8 +17,8 @@ services:
     restart: always
     command:
       "npm run build && npm run start"
-    environment:
-      API_URL: "${API_URL}"
+    env_file:
+      - "environment.env"
     labels:
       - "traefik.frontend.rule=Host:${DRIVER_HOST}"
       - "traefik.port=3000"
@@ -28,8 +28,8 @@ services:
     restart: always
     command:
       "npm run build && npm run start"
-    environment:
-      API_URL: "${API_URL}"
+    env_file:
+      - "environment.env"
     labels:
       - "traefik.frontend.rule=Host:${USER_HOST}"
       - "traefik.port=3000"
@@ -40,8 +40,8 @@ services:
     restart: always
     command:
       "npm run serve"
-    environment:
-      MONGODB: "mongodb://mongo/e-chauffeur"
+    env_file:
+      - "environment.env"
     labels:
       - "traefik.frontend.rule=Host:${API_HOST}"
       - "traefik.port=1337"

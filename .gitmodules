@@ -4,9 +4,9 @@
 [submodule "dashboard"]
 	path = dashboard
 	url = git@github.com:fabnumdef/e-chauffeur_dashboard.git
-[submodule "driver"]
-	path = driver
-	url = git@github.com:fabnumdef/e-chauffeur_driver.git
 [submodule "user"]
 	path = user
 	url = git@github.com:fabnumdef/e-chauffeur_user.git
+[submodule "driver"]
+	path = driver
+	url = git@github.com:fabnumdef/e-chauffeur_driver.git

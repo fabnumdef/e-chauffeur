@@ -1,6 +1,8 @@
 .mongo_database
 inventory.ini
 deploy_key*
+*.env
+*.retry
 
 # Created by .ignore support plugin (hsz.mobi)
 ### JetBrains template
@@ -64,4 +66,3 @@ fabric.properties
 
 # Editor-based Rest Client
 .idea/httpRequests
-

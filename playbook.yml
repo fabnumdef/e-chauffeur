@@ -8,20 +8,6 @@
       - name: docker-compose
     git_path: /opt/e-chauffeur
     home_path: /root
-    nginx_revproxy_sites:
-      default:
-        ssl: false
-        letsencrypt: false
-
-      example.com:
-        domains:
-          - example.com
-          - www.example.com
-        upstreams:
-          - { backend_address: 192.168.0.100, backend_port: 80 }
-          - { backend_address: 192.168.0.101, backend_port: 80 }
-        ssl: true
-        letsencrypt: false
 
   roles:
     - { role: "geerlingguy.pip" }
@@ -56,6 +42,7 @@
         version: master
         accept_hostkey: yes
         update: yes
+        force: yes
         dest: "{{ git_path }}"
 
     - name: "Generate env file"

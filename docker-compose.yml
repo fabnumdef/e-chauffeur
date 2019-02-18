@@ -2,34 +2,46 @@ version: "3"
 
 services:
   dashboard:
-    build: ./dashboard
     restart: always
-    command:
-      "npm run build && npm run start"
+    image: node:11-alpine
+    working_dir: "/var/www/app"
+    environment:
+      - HOST=0.0.0.0
+    command: sh -c "rm package-lock.json || npm i --only=production && npm run build && npm run start"
     env_file:
       - "environment.env"
+    volumes:
+      - "./dashboard:/var/www/app"
     labels:
       - "traefik.frontend.rule=Host:${DASHBOARD_HOST}"
       - "traefik.port=3000"
 
   driver:
-    build: ./driver
     restart: always
-    command:
-      "npm run build && npm run start"
+    image: node:11-alpine
+    working_dir: "/var/www/app"
+    environment:
+      - HOST=0.0.0.0
+    command: sh -c "npm i --only=production && npm run build && npm run start"
     env_file:
       - "environment.env"
+    volumes:
+      - "./driver:/var/www/app"
     labels:
       - "traefik.frontend.rule=Host:${DRIVER_HOST}"
       - "traefik.port=3000"
 
   user:
-    build: ./user
     restart: always
-    command:
-      "npm run build && npm run start"
+    image: node:11-alpine
+    working_dir: "/var/www/app"
+    environment:
+      - HOST=0.0.0.0
+    command: sh -c "npm i --only=production && npm run build && npm run start"
     env_file:
       - "environment.env"
+    volumes:
+      - "./user:/var/www/app"
     labels:
       - "traefik.frontend.rule=Host:${USER_HOST}"
       - "traefik.port=3000"
@@ -55,9 +67,11 @@ services:
       - ./.mongo_database:/data/db
 
   reverse-proxy:
-    image: traefik
+    image: traefik:alpine
     command: --docker
     ports:
       - "80:80"
     volumes:
     - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+      - "traefik.enable=true"

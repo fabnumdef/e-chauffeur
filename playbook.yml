@@ -50,6 +50,20 @@
         src: "./environment.env.j2"
         dest: "{{ git_path }}/environment.env"
 
+    - name: "Generate traefik config file"
+      template:
+        src: "./traefik/traefik.toml.j2"
+        dest: "{{ git_path }}/traefik/traefik.toml"
+
+    - name: "Lower acme permissions"
+      file:
+        path: "{{ git_path }}/traefik/acme.json"
+        mode: 0600
+
+    - name: "Create a network"
+      docker_network:
+        name: web
+
     - name: "Run service in {{git_path}}"
       docker_service:
         project_src: "{{ git_path }}"

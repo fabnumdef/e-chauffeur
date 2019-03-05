@@ -30,6 +30,11 @@
         state: directory
         mode: 0700
 
+    - name: "Ensure that locale exists"
+      locale_gen:
+        name: fr_FR.UTF-8
+        state: present
+
     - name: "Ensure GitHub deploy key is present on the server."
       copy:
         src: "./deploy_key" # Please generate this file first.

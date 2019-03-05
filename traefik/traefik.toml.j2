@@ -19,6 +19,7 @@ endpoint = "unix:///var/run/docker.sock"
 watch = true
 exposedByDefault = false
 network = "web"
+domain = "{{user_url}}"
 
 [acme]
 email = "gael.demette@qonfucius.team"
@@ -27,11 +28,3 @@ entryPoint = "https"
 onHostRule = true
 [acme.httpChallenge]
   entryPoint = "http"
-[[acme.domains]]
-  main = "{{api_url}}"
-[[acme.domains]]
-  main = "{{dashboard_url}}"
-[[acme.domains]]
-  main = "{{driver_url}}"
-[[acme.domains]]
-  main = "{{user_url}}"

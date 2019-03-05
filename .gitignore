@@ -1,5 +1,6 @@
 .mongo_database
 inventory.ini
+traefik/acme.json
 deploy_key*
 *.env
 *.retry

@@ -62,6 +62,7 @@
 
     - name: "Lower acme permissions"
       file:
+        state: touch
         path: "{{ git_path }}/traefik/acme.json"
         mode: 0600
 

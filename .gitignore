@@ -1,5 +1,5 @@
 .mongo_database
-inventory.ini
+inventory*.ini
 traefik/acme.json
 deploy_key*
 *.env

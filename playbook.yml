@@ -44,7 +44,7 @@
     - name: "Clone repository into {{git_path}}."
       git:
         repo: git@github.com:fabnumdef/e-chauffeur.git
-        version: master
+        version: "{{ version }}"
         accept_hostkey: yes
         update: yes
         force: yes

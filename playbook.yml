@@ -82,3 +82,4 @@
         DASHBOARD_HOST: "{{ dashboard_url }}"
         DRIVER_HOST: "{{ driver_url }}"
         USER_HOST: "{{ user_url }}"
+        USER_HOST_ALT: "{{ user_url_alt }}"

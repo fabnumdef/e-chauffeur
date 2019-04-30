@@ -3,7 +3,7 @@ version: "3"
 services:
   dashboard:
     restart: always
-    image: node:11-alpine
+    image: node:12-alpine
     working_dir: "/var/www/app"
     networks:
       - web
@@ -24,7 +24,7 @@ services:
 
   driver:
     restart: always
-    image: node:11-alpine
+    image: node:12-alpine
     working_dir: "/var/www/app"
     networks:
       - web
@@ -45,7 +45,7 @@ services:
 
   user:
     restart: always
-    image: node:11-alpine
+    image: node:12-alpine
     working_dir: "/var/www/app"
     networks:
       - web

@@ -8,6 +8,10 @@ deploy_key*
 
 /design-system
 /lib-vue
+/api
+/dashboard
+/driver
+/user
 
 # Created by .ignore support plugin (hsz.mobi)
 ### JetBrains template

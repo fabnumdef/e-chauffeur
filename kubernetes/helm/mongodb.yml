@@ -6,6 +6,7 @@
 #   imageRegistry: myRegistryName
 #   imagePullSecrets:
 #     - myRegistryKeySecretName
+#   storageClass: myStorageClass
 
 image:
   ## Bitnami MongoDB registry
@@ -17,7 +18,7 @@ image:
   ## Bitnami MongoDB image tag
   ## ref: https://hub.docker.com/r/bitnami/mongodb/tags/
   ##
-  tag: 4.0.10-debian-9-r53
+  tag: 4.0.12-debian-9-r5
   ## Specify a imagePullPolicy
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -34,15 +35,15 @@ image:
   ## ref:  https://github.com/bitnami/minideb-extras-base
   debug: false
 
-  ## String to partially override mongodb.fullname template (will maintain the release name)
-  ##
-  # nameOverride:
+## String to partially override mongodb.fullname template (will maintain the release name)
+##
+# nameOverride:
 
-  ## String to fully override mongodb.fullname template
-  ##
-  # fullnameOverride:
+## String to fully override mongodb.fullname template
+##
+# fullnameOverride:
 
-  ## Init containers parameters:
+## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
 ##
 volumePermissions:
@@ -74,9 +75,9 @@ usePassword: true
 ## MongoDB custom user and database
 ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#creating-a-user-and-database-on-first-run
 ##
-# mongodbUsername: username
+mongodbUsername: e-chauffeur
 # mongodbPassword: password
-# mongodbDatabase: database
+mongodbDatabase: e-chauffeur
 
 ## Whether enable/disable IPv6 on MongoDB
 ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#enabling/disabling-ipv6
@@ -110,8 +111,6 @@ securityContext:
   fsGroup: 1001
   runAsUser: 1001
 
-## Kubernetes Cluster Domain
-clusterDomain: cluster.local
 
 ## Kubernetes service type
 service:
@@ -166,11 +165,9 @@ replicaSet:
   pdb:
     enabled: true
     minAvailable:
-      primary: 1
       secondary: 1
       arbiter: 1
       # maxUnavailable:
-      # primary: 1
       # secondary: 1
       # arbiter: 1
 
@@ -251,19 +248,6 @@ persistence:
   size: 8Gi
   annotations: {}
 
-# Expose mongodb via ingress. This is possible if using nginx-ingress
-# https://kubernetes.github.io/ingress-nginx/user-guide/exposing-tcp-udp-services/
-ingress:
-  enabled: false
-  annotations: {}
-  labels: {}
-  paths:
-    - /
-  hosts: []
-  tls:
-    - secretName: secret-tls
-      hosts: []
-
 ## Configure the options for init containers to be run before the main app containers
 ## are started. All init containers are run sequentially and must exit without errors
 ## for the next one to be started.
@@ -333,12 +317,12 @@ configmap:
 ## Prometheus Exporter / Metrics
 ##
 metrics:
-  enabled: false
+  enabled: true
 
   image:
     registry: docker.io
-    repository: forekshub/percona-mongodb-exporter
-    tag: latest
+    repository: bitnami/mongodb-exporter
+    tag: 0.8.0-debian-9-r4
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -359,14 +343,14 @@ metrics:
   ## Metrics exporter liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
   livenessProbe:
-    enabled: false
+    enabled: true
     initialDelaySeconds: 15
     periodSeconds: 5
     timeoutSeconds: 5
     failureThreshold: 3
     successThreshold: 1
   readinessProbe:
-    enabled: false
+    enabled: true
     initialDelaySeconds: 5
     periodSeconds: 5
     timeoutSeconds: 1

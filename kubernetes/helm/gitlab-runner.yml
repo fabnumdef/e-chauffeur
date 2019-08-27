@@ -1,0 +1,9 @@
+gitlabUrl: https://gitlab.com/
+
+runnerRegistrationToken: ""
+rbac:
+  create: true
+runners:
+  image: ubuntu:devel
+  privileged: true
+

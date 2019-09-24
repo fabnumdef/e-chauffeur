@@ -1,0 +1,21 @@
+digraph d {
+    node [shape=box];
+    {
+        rank=same;
+        fabnumLib[label="fabnum-lib"];
+    }
+    {
+        rank=same;
+        vueLib[label="lib-vue"];
+    }
+    {
+        rank=same;
+        dashboard[label="dashboard"];
+        driver[label="driver"];
+        user[label="user"];
+        api[label="web API"];
+    }
+
+    fabnumLib -> vueLib -> {dashboard,driver,user};
+    api;
+}

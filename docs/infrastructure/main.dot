@@ -1,0 +1,58 @@
+digraph G {
+    newrank=true;
+    rankdir="LR";
+    node [shape=box];
+    subgraph cluster_kube {
+        label = "Kubernetes";
+        ingressController -> ingressAPI -> serviceAPI -> {pod1API, pod2API, pod3API} -> serviceMongoDB;
+        subgraph cluster_podAPI {
+            label = "ReplicaSet API";
+            {pod1API, pod2API, pod3API};
+        }
+        ingressController -> ingressDashboard -> serviceDashboard -> {pod1Dashboard, pod2Dashboard, pod3Dashboard};
+        subgraph cluster_podDashboard {
+            label = "ReplicaSet Dashboard";
+            {pod1Dashboard, pod2Dashboard, pod3Dashboard};
+        }
+        ingressController -> ingressDriver -> serviceDriver -> {pod1Driver, pod2Driver, pod3Driver};
+        subgraph cluster_podDriver {
+            label = "ReplicaSet Driver";
+            {pod1Driver, pod2Driver, pod3Driver};
+        }
+        ingressController -> ingressUser -> serviceUser -> {pod1User, pod2User, pod3User};
+        subgraph cluster_podUser {
+            label = "ReplicaSet User";
+            {pod1User, pod2User, pod3User};
+        }
+        serviceMongoDB -> {pod1MongoDB, pod2MongoDB, pod3MongoDB};
+        subgraph cluster_podMongoDB {
+            label = "ReplicaSet MongoDB";
+            {pod1MongoDB, pod2MongoDB, pod3MongoDB};
+        }
+        {
+            rank=same;
+            {pod1API, pod2API, pod3API};
+            {pod1Dashboard, pod2Dashboard, pod3Dashboard};
+            {pod1Driver, pod2Driver, pod3Driver};
+            {pod1User, pod2User, pod3User};
+            {pod1MongoDB, pod2MongoDB, pod3MongoDB};
+        }
+        {
+            rank=same;
+            ingressAPI;
+            ingressDashboard;
+            ingressDriver;
+            ingressUser;
+        }
+        {
+            rank=same;
+            serviceAPI;
+            serviceDashboard;
+            serviceDriver;
+            serviceUser;
+            serviceMongoDB;
+        }
+    }
+    loadbalancer -> ingressController;
+
+}

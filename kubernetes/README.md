@@ -17,6 +17,8 @@ kubectl label namespace e-chauffeur certmanager.k8s.io/disable-validation="true"
 helm repo add jetstack https://charts.jetstack.io
 helm install --name cert-manager --namespace e-chauffeur jetstack/cert-manager
 helm install --name acme-issuer --namespace e-chauffeur --set email=<email> ./helm/acme-issuer 
+# Setup redirection
+helm upgrade --install --namespace e-chauffeur --set ingress.issuer="letsencrypt-prod" --wait e-chauffeur-redirect ./helm/redirect
 ```
 
 Setup gitlab runner

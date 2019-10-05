@@ -1,0 +1,25 @@
+# Default values for redirect.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+namespace: e-chauffeur
+image:
+  repository: morbz/docker-web-redirect
+  tag: latest
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+env:
+  REDIRECT_TARGET: https://echauffeur.fabnum.fr
+
+service:
+  port: 80
+
+ingress:
+  enabled: true
+  host: e-chauffeur.fabnum.fr
+  issuer: letsencrypt-prod
+

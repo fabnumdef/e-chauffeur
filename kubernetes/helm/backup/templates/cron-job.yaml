@@ -1,0 +1,28 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ include "backup.fullname" . }}
+  labels:
+{{ include "backup.labels" . | indent 4 }}
+spec:
+  schedule: "{{ .Values.job.frequency }}"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: '{{ include "backup.fullname" . }}'
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+              imagePullPolicy: {{ .Values.image.pullPolicy }}
+              command: ["/bin/sh"]
+              args:
+                - "-c"
+                - "export FILENAME={{ .Values.swift.prefix }}.$(date -u +%FT%TZ).archive
+                && apt update && apt install curl
+                && /usr/bin/mongodump
+                -d {{ .Values.db.name }} -u {{ .Values.db.user }} -p {{ .Values.db.password }} -h {{ .Values.db.host }}
+                --archive=$FILENAME
+                && curl -i {{ .Values.swift.url }}/$FILENAME
+                -X PUT -H \"X-Auth-Token: {{ .Values.swift.token }}\"
+                --data-binary \"@$FILENAME\""
+          restartPolicy: OnFailure

@@ -13,6 +13,7 @@ deploy_key*
 /dashboard
 /driver
 /user
+/backups
 
 # Created by .ignore support plugin (hsz.mobi)
 ### JetBrains template

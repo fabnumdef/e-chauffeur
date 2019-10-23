@@ -4,7 +4,9 @@
     <mapping directory="" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/api" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/dashboard" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/design-system" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/driver" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib-vue" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/user" vcs="Git" />
   </component>
 </project>

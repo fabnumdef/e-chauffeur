@@ -1,0 +1,22 @@
+image:
+  repository: mongo
+  tag: latest
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+db:
+  user: "e-chauffeur"
+  password: ""
+  host: "mongodb.e-chauffeur"
+  name: "e-chauffeur"
+
+job:
+  frequency: "0 2 * * *"
+
+swift:
+  prefix: "echauffeur"
+  url: ""
+  token: ""

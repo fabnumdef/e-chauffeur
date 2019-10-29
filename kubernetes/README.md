@@ -9,6 +9,7 @@ helm init --service-account tiller --upgrade
 kubectl create -f gitlab-admin-service-account.yml
 # Setup mongodb in e-chauffeur namespace
 helm install --name mongodb --namespace e-chauffeur -f helm/mongodb.yml --set mongodbPassword=<password> stable/mongodb
+helm install --name redis --namespace e-chauffeur stable/redis --set usePassword=false
 # Setup nginx cluster
 helm install --name nginx --namespace e-chauffeur --set rbac.create=true stable/nginx-ingress
 # Setup cert manager

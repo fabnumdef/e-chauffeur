@@ -9,6 +9,7 @@ helm init --service-account tiller --upgrade
 kubectl create -f gitlab-admin-service-account.yml
 # Setup mongodb in e-chauffeur namespace
 helm install --name mongodb --namespace e-chauffeur -f helm/mongodb.yml --set mongodbPassword=<password> stable/mongodb
+helm install --name redis --namespace e-chauffeur stable/redis --set usePassword=false
 # Setup nginx cluster
 helm install --name nginx --namespace e-chauffeur --set rbac.create=true stable/nginx-ingress
 # Setup cert manager
@@ -25,4 +26,9 @@ Setup gitlab runner
 ```
 helm repo add gitlab https://charts.gitlab.io
 helm install --namespace gitlab --name gitlab-runner -f helm/gitlab-runner.yml --set runnerRegistrationToken=M_ShGAyE2CXuksoPyjMx gitlab/gitlab-runner
+```
+
+Setup automatic backup
+```
+helm install --name e-chauffeur-backup --namespace e-chauffeur helm/backup --set-string swift.tenant=<tenant> --set swift.url=<url to bucket> --set swift.user=<user> --set swift.password=<password> --set db.password=<db password>
 ```

@@ -157,8 +157,8 @@ replicaSet:
   ## Number of replicas per each node type
   ##
   replicas:
-    secondary: 2
-    arbiter: 0
+    secondary: 1
+    arbiter: 1
 
   ## Pod Disruption Budget
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
@@ -245,7 +245,7 @@ persistence:
   # storageClass: "-"
   accessModes:
     - ReadWriteOnce
-  size: 8Gi
+  size: 15Gi
   annotations: {}
 
 ## Configure the options for init containers to be run before the main app containers

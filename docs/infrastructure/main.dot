@@ -4,7 +4,7 @@ digraph G {
     node [shape=box];
     subgraph cluster_kube {
         label = "Kubernetes";
-        ingressController -> ingressAPI -> serviceAPI -> {pod1API, pod2API, pod3API} -> serviceMongoDB;
+        ingressController -> ingressAPI -> serviceAPI -> {pod1API, pod2API, pod3API} -> {serviceMongoDB, serviceRedis};
         subgraph cluster_podAPI {
             label = "ReplicaSet API";
             {pod1API, pod2API, pod3API};
@@ -29,13 +29,22 @@ digraph G {
             label = "ReplicaSet MongoDB";
             {pod1MongoDB, pod2MongoDB, pod3MongoDB};
         }
+        serviceRedis -> {pod1RedisMaster, pod2RedisSlave};
+        subgraph cluster_podRedis {
+            label = "Master/Slave Redis";
+            {pod1RedisMaster, pod2RedisSlave};
+        }
+        {
+            rank=same;
+            {pod1MongoDB, pod2MongoDB, pod3MongoDB};
+            {pod1RedisMaster, pod2RedisSlave};
+        }
         {
             rank=same;
             {pod1API, pod2API, pod3API};
             {pod1Dashboard, pod2Dashboard, pod3Dashboard};
             {pod1Driver, pod2Driver, pod3Driver};
             {pod1User, pod2User, pod3User};
-            {pod1MongoDB, pod2MongoDB, pod3MongoDB};
         }
         {
             rank=same;
@@ -50,7 +59,6 @@ digraph G {
             serviceDashboard;
             serviceDriver;
             serviceUser;
-            serviceMongoDB;
         }
     }
     loadbalancer -> ingressController;

@@ -1,0 +1,14 @@
+image:
+  repository: mongo
+  tag: latest
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+db:
+  uri: "e-chauffeur"
+
+job:
+  frequency: "0 1 * * *"

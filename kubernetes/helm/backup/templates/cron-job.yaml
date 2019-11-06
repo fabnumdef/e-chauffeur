@@ -1,0 +1,32 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ include "backup.fullname" . }}
+  labels:
+{{ include "backup.labels" . | indent 4 }}
+spec:
+  schedule: "{{ .Values.job.frequency }}"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: '{{ include "backup.fullname" . }}'
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+              imagePullPolicy: {{ .Values.image.pullPolicy }}
+              command: ["/bin/sh"]
+              args:
+                - "-c"
+                - >
+                  export FILENAME={{ .Values.swift.prefix }}.$(date -u +%FT%TZ).archive
+                  && apt update && apt install -y curl jq
+                  && /usr/bin/mongodump -d {{ .Values.db.name }} -u {{ .Values.db.user }}
+                  -p {{ .Values.db.password }} -h {{ .Values.db.host }} --archive=$FILENAME
+                  && export ACCESS_TOKEN=`curl -X POST https://auth.cloud.ovh.net/v2.0/tokens
+                  -d "{\"auth\":{\"tenantName\":\"{{ .Values.swift.tenant }}\",\"passwordCredentials\":
+                  {\"username\": \"{{ .Values.swift.user }}\", \"password\":\"{{ .Values.swift.password }}\"}}}"
+                  -H 'Content-type: application/json' | jq -r '.access.token.id'`
+                  && curl -i {{ .Values.swift.url }}/$FILENAME -X PUT -H "X-Auth-Token: $ACCESS_TOKEN"
+                  --data-binary "@$FILENAME"
+
+          restartPolicy: OnFailure

@@ -23,6 +23,10 @@ Il s'agit d'une base de données no-SQL, dite schemaless, c'est à dire qu'elle 
 
 Notre utilisation de MongoDB reste basique : écriture / lecture / aggrégation.
 
+### Redis
+
+Un service redis est utilisé en sa qualité de pub/sub, son utilisation aujourd'hui se limite à synchroniser les websockets entre les différents pods d'API afin qu'une course émise sur un pod X soit bien reçue sur les clients connectés au pod Y.
+
 ## Frontend
 
 ### VueJS & NuxtJS

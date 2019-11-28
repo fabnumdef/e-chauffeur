@@ -2,7 +2,10 @@ image:
   repository: mongo
   tag: latest
   pullPolicy: IfNotPresent
-
+cleanImage:
+  repository: qonfucius/date-filter
+  tag: latest
+  pullPolicy: IfNotPresent
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""

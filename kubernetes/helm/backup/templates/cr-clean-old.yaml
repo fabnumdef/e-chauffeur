@@ -18,7 +18,6 @@ spec:
               args:
                 - "-c"
                 - >
-                  {{ .Values.swift.prefix }}.$(date -u +%FT%TZ).archive
                   export ACCESS_TOKEN=`curl -X POST https://auth.cloud.ovh.net/v2.0/tokens
                   -d "{\"auth\":{\"tenantName\":\"{{ .Values.swift.tenant }}\",\"passwordCredentials\":
                   {\"username\": \"{{ .Values.swift.user }}\", \"password\":\"{{ .Values.swift.password }}\"}}}"

@@ -27,6 +27,6 @@ spec:
                   {\"username\": \"{{ .Values.swift.user }}\", \"password\":\"{{ .Values.swift.password }}\"}}}"
                   -H 'Content-type: application/json' | jq -r '.access.token.id'`
                   && curl -i {{ .Values.swift.url }}/$FILENAME -X PUT -H "X-Auth-Token: $ACCESS_TOKEN"
-                  --data-binary "@$FILENAME"
+                  -T $FILENAME
 
           restartPolicy: OnFailure

@@ -1,0 +1,29 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: "{{ include "backup.fullname" . }}-cleaner"
+  labels:
+{{ include "backup.labels" . | indent 4 }}
+spec:
+  schedule: "{{ .Values.job.frequency }}"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: '{{ include "backup.fullname" . }}-cleaner'
+              image: "{{ .Values.cleanImage.repository }}:{{ .Values.cleanImage.tag }}"
+              imagePullPolicy: {{ .Values.cleanImage.pullPolicy }}
+              command: ["/bin/sh"]
+              args:
+                - "-c"
+                - >
+                  export ACCESS_TOKEN=`curl -X POST https://auth.cloud.ovh.net/v2.0/tokens
+                  -d "{\"auth\":{\"tenantName\":\"{{ .Values.swift.tenant }}\",\"passwordCredentials\":
+                  {\"username\": \"{{ .Values.swift.user }}\", \"password\":\"{{ .Values.swift.password }}\"}}}"
+                  -H 'Content-type: application/json' | jq -r '.access.token.id'`
+                  && for fileDate in `curl {{ .Values.swift.url }}/ -X GET -H "X-Auth-Token: $ACCESS_TOKEN"
+                  | awk -F '.' '{print $2}' | xargs date-filter`; do curl
+                  {{ .Values.swift.url }}/{{ .Values.swift.prefix }}.$fileDate.archive
+                  -X DELETE -H "X-Auth-Token: $ACCESS_TOKEN"; done
+          restartPolicy: OnFailure

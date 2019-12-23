@@ -1,10 +1,6 @@
 ```
 # Will create e-chauffeur namespace
 kubectl create -f namespace.yml
-# Will create tiller service account
-kubectl create -f rbac-config.yml
-# Will use tiller service account with helm
-helm init --service-account tiller --upgrade
 # Will create gitlab service account
 kubectl create -f gitlab-admin-service-account.yml
 # Setup mongodb in e-chauffeur namespace

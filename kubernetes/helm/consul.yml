@@ -1,0 +1,36 @@
+## Consul service ports
+HttpPort: 8500
+RpcPort: 8400
+SerflanPort: 8301
+SerflanUdpPort: 8301
+SerfwanPort: 8302
+SerfwanUdpPort: 8302
+ServerPort: 8300
+ConsulDnsPort: 8600
+
+Domain: consul
+
+## Used as selector
+Component: "consul"
+Replicas: 3
+Image: "consul"
+ImageTag: "1.5.2"
+ImagePullPolicy: "Always"
+Resources: {}
+
+priorityClassName: ""
+
+Storage: "1Gi"
+
+DisableHostNodeId: false
+
+Gossip:
+  Encrypt: true
+  Create: true
+
+maxUnavailable: 1
+
+ui:
+  enabled: false
+uiService:
+  enabled: false

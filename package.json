@@ -1,0 +1,22 @@
+{
+  "name": "e-chauffeur",
+  "directories": {
+    "doc": "docs"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "vuepress": "^1.1.0"
+  },
+  "scripts": {
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fabnumdef/e-chauffeur.git"
+  },
+  "bugs": {
+    "url": "https://github.com/fabnumdef/e-chauffeur/issues"
+  },
+  "homepage": "https://github.com/fabnumdef/e-chauffeur#readme"
+}

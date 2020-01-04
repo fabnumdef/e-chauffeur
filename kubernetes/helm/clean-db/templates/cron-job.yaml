@@ -1,0 +1,38 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ include "clean-db.fullname" . }}
+  labels:
+{{ include "clean-db.labels" . | indent 4 }}
+spec:
+  schedule: "{{ .Values.job.frequency }}"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: '{{ include "clean-db.fullname" . }}-logs'
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+              imagePullPolicy: {{ .Values.image.pullPolicy }}
+              command:
+                - "/usr/bin/mongo"
+                - "{{ .Values.db.uri }}"
+                - "--eval"
+                - "'db.logs.remove({timestamp: {$lt: (new Date(new Date().setFullYear(new Date().getFullYear() - 1)))}})'"
+            - name: '{{ include "clean-db.fullname" . }}-geo'
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+              imagePullPolicy: {{ .Values.image.pullPolicy }}
+              command:
+                - "/usr/bin/mongo"
+                - "{{ .Values.db.uri }}"
+                - "--eval"
+                - "'db[\"geo-tracking\"].remove({end: {$lt: (new Date(new Date().setMonth(new Date().getMonth() - 3)))}})'"
+            - name: '{{ include "clean-db.fullname" . }}-rides'
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+              imagePullPolicy: {{ .Values.image.pullPolicy }}
+              command:
+                - "/usr/bin/mongo"
+                - "{{ .Values.db.uri }}"
+                - "--eval"
+                - "'db.rides.updateMany({end: {$lt: new Date(new Date().getTime() - (24*60*60*1000) * 15)}, $or: [{phone: {$ne: null}}, {\"owner.firstname\": {$ne: null}}, {\"owner.lastname\": {$ne: null}}, {\"owner.email\": {$ne: null}}]}, {$set: {phone: null, \"owner.firstname\": null, \"owner.lastname\": null, \"owner.email\": null}})'"
+          restartPolicy: OnFailure

@@ -1,3 +1,4 @@
+node_modules
 .mongo_database
 passwords
 inventory*.ini
@@ -8,6 +9,11 @@ deploy_key*
 
 /design-system
 /lib-vue
+/api
+/dashboard
+/driver
+/user
+/backups
 
 # Created by .ignore support plugin (hsz.mobi)
 ### JetBrains template

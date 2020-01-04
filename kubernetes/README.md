@@ -1,8 +1,6 @@
 ```
 # Will create e-chauffeur namespace
 kubectl create -f namespace.yml
-# Will create gitlab service account
-kubectl create -f gitlab-admin-service-account.yml
 # Setup mongodb in e-chauffeur namespace
 helm install --name mongodb --namespace e-chauffeur -f helm/mongodb.yml --set mongodbPassword=<password> stable/mongodb
 helm install --name redis --namespace e-chauffeur stable/redis --set usePassword=false
@@ -18,13 +16,16 @@ helm install --name acme-issuer --namespace e-chauffeur --set email=<email> ./he
 helm upgrade --install --namespace e-chauffeur --set ingress.issuer="letsencrypt-prod" --wait e-chauffeur-redirect ./helm/redirect
 ```
 
-Setup gitlab runner
+# Setup monitoring
+
 ```
-helm repo add gitlab https://charts.gitlab.io
-helm install --namespace gitlab --name gitlab-runner -f helm/gitlab-runner.yml --set runnerRegistrationToken=M_ShGAyE2CXuksoPyjMx gitlab/gitlab-runner
+helm repo add loki https://grafana.github.io/loki/charts
+helm repo update
+helm upgrade --install loki loki/loki-stack
+helm install prometheus stable/prometheus-operator -f helm/prometheus-operator.yml
 ```
 
-Setup automatic backup (with helm3)
+# Setup automatic backup (with helm3)
 ```
 helm install auto-backup --namespace e-chauffeur helm/backup --set-string swift.tenant=<tenant> --set swift.url=<url to bucket> --set swift.user=<user> --set swift.password=<password> --set db.password=<db password>
 ```

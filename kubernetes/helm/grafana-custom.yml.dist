@@ -1,7 +1,0 @@
-# source https://github.com/helm/charts/blob/master/stable/grafana/values.yaml
-ingress:
-  hosts:
-    - grafana.localhost
-  tls:
-    - hosts:
-        - grafana.localhost

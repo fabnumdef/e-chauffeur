@@ -2,7 +2,7 @@
 # Will create e-chauffeur namespace
 kubectl create -f namespace.yml
 # Setup mongodb in e-chauffeur namespace
-helm install --name mongodb --namespace e-chauffeur -f helm/mongodb.yml --set mongodbPassword=<password> stable/mongodb
+helm upgrade --install --namespace e-chauffeur -f helm/mongodb.yml --set mongodbRootPassword=<password> --set mongodbPassword=<password> mongodb stable/mongodb
 helm install --name redis --namespace e-chauffeur stable/redis --set usePassword=false
 # Setup nginx cluster
 helm install --name nginx --namespace e-chauffeur --set rbac.create=true stable/nginx-ingress
@@ -21,11 +21,10 @@ helm upgrade --install --namespace e-chauffeur --set ingress.issuer="letsencrypt
 ```
 helm repo add loki https://grafana.github.io/loki/charts
 helm repo update
-helm upgrade --install grafana stable/grafana -f helm/grafana.yml -f helm/grafana-custom.staging.yml
 helm upgrade --install loki loki/loki-stack
-helm upgrade --install prometheus stable/prometheus-operator -f helm/prometheus-operator.yml
+helm upgrade --install prometheus stable/prometheus-operator -f helm/prometheus-operator.yml -f helm/prometheus-operator-custom.<copied file>.yml
 # Use the following command to get admin password
-kubectl get secret --namespace e-chauffeur grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+kubectl get secret --namespace e-chauffeur prometheus-grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
 ```
 
 # Setup automatic backup (with helm3)

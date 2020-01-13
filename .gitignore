@@ -6,6 +6,8 @@ traefik/acme.json
 deploy_key*
 *.env
 *.retry
+kubernetes/helm/grafana-certificate.*.y*ml
+kubernetes/helm/prometheus-operator-custom.*.y*ml
 
 /design-system
 /lib-vue
@@ -14,6 +16,7 @@ deploy_key*
 /driver
 /user
 /backups
+/navette
 
 # Created by .ignore support plugin (hsz.mobi)
 ### JetBrains template

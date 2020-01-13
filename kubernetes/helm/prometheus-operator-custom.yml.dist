@@ -1,0 +1,43 @@
+# source https://github.com/helm/charts/blob/master/stable/grafana/values.yaml
+grafana:
+  ingress:
+    hosts:
+      - grafana.localhost
+    tls:
+      - secretName: grafana-cert-tls
+        hosts:
+          - grafana.localhost
+  adminPassword:
+  grafana.ini:
+    smtp:
+      enabled: true
+      host:
+      from_address:
+      user:
+      password:
+alertmanager:
+  config:
+    route:
+      receiver: e-chauffeur-email
+      group_by: ['alertname', 'priority']
+      group_wait: 10s
+      repeat_interval: 30m
+      routes:
+        - match:
+            severity: major
+          receiver: e-chauffeur-slack
+          continue: true
+    receivers:
+      - name: e-chauffeur-email
+        email_configs:
+          - smarthost: ssl0.ovh.net:465
+            require_tls: true
+            from:
+            to:
+            auth_username:
+            auth_password:
+            send_resolved: true
+      - name: e-chauffeur-slack
+        slack_configs:
+          - api_url:
+            send_resolved: true

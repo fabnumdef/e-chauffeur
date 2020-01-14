@@ -22,6 +22,7 @@ helm upgrade --install --namespace e-chauffeur --set ingress.issuer="letsencrypt
 helm repo add loki https://grafana.github.io/loki/charts
 helm repo update
 helm upgrade --install loki loki/loki-stack
+kubectl create -f helm/grafana-certificate.<file>.yaml
 helm upgrade --install prometheus stable/prometheus-operator -f helm/prometheus-operator.yml -f helm/prometheus-operator-custom.<copied file>.yml
 # Use the following command to get admin password
 kubectl get secret --namespace e-chauffeur prometheus-grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo

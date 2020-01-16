@@ -6,7 +6,7 @@ replicaSet:
   enabled: true
   name: rs0
   replicas:
-    secondary: 1
+    secondary: 2
     arbiter: 1
 persistence:
   enabled: true

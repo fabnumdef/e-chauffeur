@@ -7,7 +7,7 @@ replicaSet:
   name: rs0
   replicas:
     secondary: 2
-    arbiter: 1
+    arbiter: 0
 persistence:
   enabled: true
   size: 15Gi

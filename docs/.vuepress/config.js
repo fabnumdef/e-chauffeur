@@ -9,6 +9,7 @@ module.exports = {
       '/technologies',
       '/setup',
       '/infrastructure',
+      '/flux',
     ]
   },
   locales: {

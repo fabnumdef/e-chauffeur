@@ -19,14 +19,14 @@ spec:
                 - "-c"
                 - >
                   export FILENAME={{ .Values.swift.prefix }}.$(date -u +%FT%TZ).archive
-                  && apt update && apt install -y curl jq
+                  && apt update && apt install -y python3-pip && pip3 install --upgrade httpie
                   && /usr/bin/mongodump -d {{ .Values.db.name }} -u {{ .Values.db.user }}
                   -p {{ .Values.db.password }} -h {{ .Values.db.host }} --archive=$FILENAME
-                  && export ACCESS_TOKEN=`curl -X POST https://auth.cloud.ovh.net/v2.0/tokens
-                  -d "{\"auth\":{\"tenantName\":\"{{ .Values.swift.tenant }}\",\"passwordCredentials\":
-                  {\"username\": \"{{ .Values.swift.user }}\", \"password\":\"{{ .Values.swift.password }}\"}}}"
-                  -H 'Content-type: application/json' | jq -r '.access.token.id'`
-                  && curl -i {{ .Values.swift.url }}/$FILENAME -X PUT -H "X-Auth-Token: $ACCESS_TOKEN"
-                  -T $FILENAME
-
+                  && export ACCESS_TOKEN=`http --ignore-stdin --headers --json https://auth.cloud.ovh.net/v3/auth/tokens
+                  auth:='{"identity":{"methods":["password"],"password":{"user":
+                  {"domain":{"id":"default"},"name":"{{ .Values.swift.user }}","password":
+                  "{{ .Values.swift.password }}"}}},"scope":{"project":{"domain":{"id":"default"},"name":
+                  "{{ .Values.swift.tenant }}"}}}' | awk '/X-Subject-Token/ {print $2}'`
+                  && http --ignore-stdin PUT {{ .Values.swift.url }}/$FILENAME X-Auth-Token:$ACCESS_TOKEN
+                  Content-Type:application/octet-stream @$FILENAME
           restartPolicy: OnFailure

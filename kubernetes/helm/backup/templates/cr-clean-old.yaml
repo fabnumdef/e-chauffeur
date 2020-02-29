@@ -18,12 +18,13 @@ spec:
               args:
                 - "-c"
                 - >
-                  export ACCESS_TOKEN=`curl -X POST https://auth.cloud.ovh.net/v2.0/tokens
-                  -d "{\"auth\":{\"tenantName\":\"{{ .Values.swift.tenant }}\",\"passwordCredentials\":
-                  {\"username\": \"{{ .Values.swift.user }}\", \"password\":\"{{ .Values.swift.password }}\"}}}"
-                  -H 'Content-type: application/json' | jq -r '.access.token.id'`
-                  && for fileDate in `curl {{ .Values.swift.url }}/ -X GET -H "X-Auth-Token: $ACCESS_TOKEN"
-                  | awk -F '.' '{print $2}' | xargs date-filter`; do curl
-                  {{ .Values.swift.url }}/{{ .Values.swift.prefix }}.$fileDate.archive
-                  -X DELETE -H "X-Auth-Token: $ACCESS_TOKEN"; done
+                  apk add --update httpie
+                  && export ACCESS_TOKEN=`http --ignore-stdin --headers --json https://auth.cloud.ovh.net/v3/auth/tokens
+                  auth:='{"identity":{"methods":["password"],"password":{"user":
+                  {"domain":{"id":"default"},"name":"{{ .Values.swift.user }}","password":
+                  "{{ .Values.swift.password }}"}}},"scope":{"project":{"domain":{"id":"default"},"name":
+                  "{{ .Values.swift.tenant }}"}}}' | awk '/X-Subject-Token/ {print $2}'`
+                  && for fileDate in `http --ignore-stdin GET {{ .Values.swift.url }}/ X-Auth-Token:$ACCESS_TOKEN
+                  | awk -F '.' '{print $2}' | xargs date-filter`; do http --ignore-stdin DELETE
+                  {{ .Values.swift.url }}/{{ .Values.swift.prefix }}.$fileDate.archive X-Auth-Token:$ACCESS_TOKEN; done
           restartPolicy: OnFailure

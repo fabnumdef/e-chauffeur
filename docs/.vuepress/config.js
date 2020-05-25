@@ -10,6 +10,7 @@ module.exports = {
       '/setup',
       '/infrastructure',
       '/flux',
+      '/rights',
     ]
   },
   locales: {
